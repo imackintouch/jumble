@@ -40,7 +40,7 @@ def jumble(word):
     :return:
     """
     if len(word) == 1:
-        logger.debug("A stopping state is reached with {}".format(word))
+        logger.debug(f"A stopping state is reached with {word}")
         return list(word)
 
     scrambled_list = []
@@ -50,44 +50,34 @@ def jumble(word):
         for jumble_list_item in jumble_list:
             scrambled_list.append(word[i] + jumble_list_item)
 
-    logger.debug("scrambled_list:{}".format(scrambled_list))
+    logger.debug(f"scrambled_list:{scrambled_list}")
     return scrambled_list
 
 
 def display_list(jumbled_words_list, word_length, input_word):
     # Sort list as a prelude to eliminating duplicates in display
-    jumbled_words_sorted = sorted(jumbled_words_list)
-    logger.debug("My sorted jumbled list is:{}".format(jumbled_words_sorted))
-    #
-    # Let us now eliminate the dupes from this sorted list.
-    prev_word = ""
-    jumbled_words = []
-    for word in jumbled_words_sorted:
-        if prev_word != word:
-            jumbled_words.append(word)
-            prev_word = word
+    jumbled_words_sorted = sorted(set(jumbled_words_list))
 
-    logger.debug("My unique jumbled word list is:{}".format(jumbled_words))
-    logger.info("All possible unique {} jumbles of word '{}' are: "
-                .format(len(jumbled_words), input_word))
+    logger.debug(f"My unique jumbled word list is:{jumbled_words_sorted}")
+    logger.info(f"All possible unique {len(jumbled_words_sorted)} jumbles of word '{input_word}' are: ")
     #
     # Print in groups of 80//(length of (input word + space)) per line
     #
     line_capacity = 80 // (word_length + 1) - 1  # We start off at the 0 position
-    logger.debug("Line capacity:{}".format(line_capacity + 1))
+    logger.debug(f"Line capacity:{line_capacity+1}")
     i = 0
     display_line = ""
 
-    for j in range(0, len(jumbled_words)):
-        word = jumbled_words[j]
+    for j in range(0, len(jumbled_words_sorted)):
+        word = jumbled_words_sorted[j]
 
         if len(display_line) == 0:  # We don't want leading spaces
             display_line = word
         else:
             display_line = display_line + " " + word
 
-        logger.debug("My display_line is currently:{}".format(display_line))
-        if (i == line_capacity) or (j == len(jumbled_words) - 1):
+        logger.debug(f"My display_line is currently:{display_line}")
+        if (i == line_capacity) or (j == len(jumbled_words_sorted) - 1):
             logger.info(display_line)
             display_line = ""
             i = 0
@@ -96,6 +86,8 @@ def display_list(jumbled_words_list, word_length, input_word):
 
 
 def main():
+    # ToDo: Add an argument and logic for passing the input word from the command line
+    #  The command line input would then bypass the input() call
     parser = ArgumentParser(description="Display all jumbles of a word with unique letters")
     parser.add_argument('-l', '--loglevel', type=str, dest='loglevel', default='INFO',
                         choices=['CRITICAL', 'WARN', 'ERROR', 'INFO', 'DEBUG'], help='logging level')
@@ -104,7 +96,6 @@ def main():
     setup_logger(args.loglevel)
     word = input('Enter a word to scramble please: ')
     jumbled_words = jumble(word)
-    # logger.info("All possible unique jumbles of word '{}' are: ".format(word))
 
     display_list(jumbled_words, len(word), word)
 
