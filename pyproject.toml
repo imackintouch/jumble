@@ -1,0 +1,9 @@
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38', 'py39', 'py310']
+include = '\.py$'
+
+[tool.isort]
+multi_line_output = 3
+line_length = 88
+include_trailing_comma = true

@@ -10,8 +10,7 @@ def setup_logger(loglevel):
     global logger
     logger = logging.getLogger()
     handler = logging.StreamHandler()
-    formatter = logging.Formatter(
-        '%(asctime)s [%(levelname)-8s] %(message)s')
+    formatter = logging.Formatter("%(asctime)s [%(levelname)-8s] %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     logger.setLevel(loglevel)
@@ -59,7 +58,9 @@ def display_list(jumbled_words_list, word_length, input_word):
     jumbled_words_sorted = sorted(set(jumbled_words_list))
 
     logger.debug(f"My unique jumbled word list is:{jumbled_words_sorted}")
-    logger.info(f"All possible unique {len(jumbled_words_sorted)} jumbles of word '{input_word}' are: ")
+    logger.info(
+        f"All possible unique {len(jumbled_words_sorted)} jumbles of word '{input_word}' are: "
+    )
     #
     # Print in groups of 80//(length of (input word + space)) per line
     #
@@ -88,13 +89,22 @@ def display_list(jumbled_words_list, word_length, input_word):
 def main():
     # ToDo: Add an argument and logic for passing the input word from the command line
     #  The command line input would then bypass the input() call
-    parser = ArgumentParser(description="Display all jumbles of a word with unique letters")
-    parser.add_argument('-l', '--loglevel', type=str, dest='loglevel', default='INFO',
-                        choices=['CRITICAL', 'WARN', 'ERROR', 'INFO', 'DEBUG'], help='logging level')
+    parser = ArgumentParser(
+        description="Display all jumbles of a word with unique letters"
+    )
+    parser.add_argument(
+        "-l",
+        "--loglevel",
+        type=str,
+        dest="loglevel",
+        default="INFO",
+        choices=["CRITICAL", "WARN", "ERROR", "INFO", "DEBUG"],
+        help="logging level",
+    )
     args = parser.parse_args()
 
     setup_logger(args.loglevel)
-    word = input('Enter a word to scramble please: ')
+    word = input("Enter a word to scramble please: ")
     jumbled_words = jumble(word)
 
     display_list(jumbled_words, len(word), word)
@@ -102,5 +112,5 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
